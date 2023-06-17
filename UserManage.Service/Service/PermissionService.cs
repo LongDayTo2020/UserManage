@@ -1,4 +1,6 @@
-﻿using UserManage.Repository.Entity;
+﻿using UserManage.Library;
+using UserManage.Library.ViewModel.Request;
+using UserManage.Repository.Entity;
 using UserManage.Repository.Repository;
 
 namespace UserManage.Service.Service;
@@ -6,8 +8,8 @@ namespace UserManage.Service.Service;
 public interface IPermissionService
 {
     List<Permission> GetAll();
-    bool Add(Permission permission);
-    bool Update(int id, Permission permission);
+    bool Add(RequestPermission permission);
+    bool Update(int id, RequestPermission permission);
     bool Delete(int id);
 }
 
@@ -22,9 +24,19 @@ public class PermissionService : IPermissionService
 
     public List<Permission> GetAll() => _permissionRepository.QueryAll().ToList();
 
-    public bool Add(Permission permission) => _permissionRepository.Create(permission);
+    public bool Add(RequestPermission permission)
+    {
+        var newPermission = new Permission();
+        ObjectLibrary.CopyProperties(permission, newPermission);
+        return _permissionRepository.Create(newPermission);
+    }
 
-    public bool Update(int id, Permission permission) => _permissionRepository.Update(id, permission);
+    public bool Update(int id, RequestPermission permission)
+    {
+        var updatePermission = new Permission();
+        ObjectLibrary.CopyProperties(permission, updatePermission);
+        return _permissionRepository.Update(id, updatePermission);
+    }
 
     public bool Delete(int id) => _permissionRepository.Delete(id);
 }

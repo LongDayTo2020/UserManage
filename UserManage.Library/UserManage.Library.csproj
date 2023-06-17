@@ -6,9 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\UserManage.Library\UserManage.Library.csproj" />
-      <ProjectReference Include="..\UserManage.Repository\UserManage.Repository.csproj" />
-    </ItemGroup>
-
 </Project>

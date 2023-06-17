@@ -1,4 +1,6 @@
-﻿using UserManage.Repository.Entity;
+﻿using UserManage.Library;
+using UserManage.Library.ViewModel.Request;
+using UserManage.Repository.Entity;
 using UserManage.Repository.Repository;
 
 namespace UserManage.Service.Service;
@@ -6,25 +8,35 @@ namespace UserManage.Service.Service;
 public interface IRoleGroupService
 {
     List<RoleGroup> GetAll();
-    bool Add(RoleGroup roleGroup);
-    bool Update(int id, RoleGroup roleGroup);
+    bool Add(RequestRoleGroup roleGroup);
+    bool Update(int id, RequestRoleGroup roleGroup);
     bool Delete(int id);
 }
 
 public class RoleGroupService : IRoleGroupService
 {
-    private readonly IRoleGroupRepository _userRepository;
+    private readonly IRoleGroupRepository _roleGroupRepository;
 
-    public RoleGroupService(IRoleGroupRepository userRepository)
+    public RoleGroupService(IRoleGroupRepository roleGroupRepository)
     {
-        _userRepository = userRepository;
+        _roleGroupRepository = roleGroupRepository;
     }
 
-    public List<RoleGroup> GetAll() => _userRepository.QueryAll().ToList();
+    public List<RoleGroup> GetAll() => _roleGroupRepository.QueryAll().ToList();
 
-    public bool Add(RoleGroup roleGroup) => _userRepository.Create(roleGroup);
+    public bool Add(RequestRoleGroup roleGroup)
+    {
+        var newRoleGroup = new RoleGroup();
+        ObjectLibrary.CopyProperties(roleGroup, newRoleGroup);
+        return _roleGroupRepository.Create(newRoleGroup);
+    }
 
-    public bool Update(int id, RoleGroup roleGroup) => _userRepository.Update(id, roleGroup);
+    public bool Update(int id, RequestRoleGroup roleGroup)
+    {
+        var updateRoleGroup = new RoleGroup();
+        ObjectLibrary.CopyProperties(roleGroup, updateRoleGroup);
+        return _roleGroupRepository.Update(id, updateRoleGroup);
+    }
 
-    public bool Delete(int id) => _userRepository.Delete(id);
+    public bool Delete(int id) => _roleGroupRepository.Delete(id);
 }

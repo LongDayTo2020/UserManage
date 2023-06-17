@@ -1,4 +1,6 @@
-﻿using UserManage.Repository.Entity;
+﻿using UserManage.Library;
+using UserManage.Library.ViewModel.Request;
+using UserManage.Repository.Entity;
 using UserManage.Repository.Repository;
 
 namespace UserManage.Service.Service;
@@ -6,8 +8,8 @@ namespace UserManage.Service.Service;
 public interface IUserService
 {
     List<User> GetAll();
-    bool Add(User user);
-    bool Update(int id, User user);
+    bool Add(RequestUser user);
+    bool Update(int id, RequestUser user);
     bool Delete(int id);
 }
 
@@ -22,9 +24,19 @@ public class UserService : IUserService
 
     public List<User> GetAll() => _userRepository.QueryAll().ToList();
 
-    public bool Add(User user) => _userRepository.Create(user);
+    public bool Add(RequestUser user)
+    {
+        var newUser = new User();
+        ObjectLibrary.CopyProperties(user, newUser);
+        return _userRepository.Create(newUser);
+    }
 
-    public bool Update(int id, User user) => _userRepository.Update(id, user);
+    public bool Update(int id, RequestUser user)
+    {
+        var updateUser = new User();
+        ObjectLibrary.CopyProperties(user, updateUser);
+        return _userRepository.Update(id, updateUser);
+    }
 
     public bool Delete(int id) => _userRepository.Delete(id);
 }

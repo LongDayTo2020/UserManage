@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserManage.Service.Service;
 
 namespace UserManage.Controllers
 {
@@ -14,9 +15,11 @@ namespace UserManage.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController()
+        private readonly ILogService _logService;
+
+        public LoginController(ILogService logService)
         {
-            
+            _logService = logService;
         }
 
         /// <summary>

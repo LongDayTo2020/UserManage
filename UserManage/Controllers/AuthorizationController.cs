@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserManage.Library.ViewModel.Request;
+using UserManage.Service.Service;
 
 namespace UserManage.Controllers
 {
@@ -14,44 +16,42 @@ namespace UserManage.Controllers
     [ApiController]
     public class AuthorizationController : ControllerBase
     {
+        private readonly IAuthorizationService _authorizationService;
+
+        public AuthorizationController(IAuthorizationService authorizationService)
+        {
+            _authorizationService = authorizationService;
+        }
+
         /// <summary>
         /// 取得角色授權
         /// </summary>
         /// <returns></returns>
         [HttpGet("[action]")]
-        public IActionResult GetAuthorizationList()
-        {
-            return Ok();
-        }
+        public IActionResult GetAuthorizationList() => Ok(_authorizationService.GetAll().ToList());
 
         /// <summary>
         /// 新增角色授權
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult AddAuthorization()
-        {
-            return Ok();
-        }
+        public IActionResult AddAuthorization([FromBody] RequestAuthorization request) =>
+            Ok(_authorizationService.Add(request));
 
         /// <summary>
         /// 更新角色授權
         /// </summary>
         /// <returns></returns>
-        [HttpPut("[action]")]
-        public IActionResult UpdateAuthorization()
-        {
-            return Ok();
-        }
+        [HttpPut("[action]/{id:int}")]
+        public IActionResult UpdateAuthorization([FromRoute] int id, [FromBody] RequestAuthorization request) =>
+            Ok(_authorizationService.Update(id, request));
+
 
         /// <summary>
         /// 刪除角色授權
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("[action]")]
-        public IActionResult DeleteAuthorization()
-        {
-            return Ok();
-        }
+        [HttpDelete("[action]/{id:int}")]
+        public IActionResult DeleteAuthorization([FromRoute] int id) => Ok(_authorizationService.Delete(id));
     }
 }
