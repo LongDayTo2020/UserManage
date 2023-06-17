@@ -2,9 +2,9 @@
 
 public interface IMaintain<T>
 {
-    bool Create(T param);
-    IEnumerable<T> QueryAll();
-    T Query(object param);
-    bool Delete(object id);
-    bool Update(object id, T param);
+    public bool Create(T param);
+    public IEnumerable<T> QueryAll();
+    public T Query(object param);
+    public bool Delete(object id);
+    public bool Update(object id, T param);
 }
