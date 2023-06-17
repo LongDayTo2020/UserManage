@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class RolePermissionRelationshipRepository : IMaintain<RolePermissionRelationship>
+    public interface IRolePermissionRelationshipRepository
+    {
+        bool Create(RolePermissionRelationship rolePermissionRelationship);
+        IEnumerable<RolePermissionRelationship> QueryAll();
+        RolePermissionRelationship Query(object rolePermissionRelationship);
+        bool Delete(object id);
+        bool Update(object id, RolePermissionRelationship rolePermissionRelationship);
+    }
+
+    public class RolePermissionRelationshipRepository : IMaintain<RolePermissionRelationship>, IRolePermissionRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 

@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class PermissionRepository : IMaintain<Permission>
+    public interface IPermissionRepository
+    {
+        bool Create(Permission permission);
+        IEnumerable<Permission> QueryAll();
+        Permission Query(object permission);
+        bool Delete(object id);
+        bool Update(object id, Permission permission);
+    }
+
+    public class PermissionRepository : IMaintain<Permission>, IPermissionRepository
     {
         private readonly IDbConnection _iDbConnection;
 

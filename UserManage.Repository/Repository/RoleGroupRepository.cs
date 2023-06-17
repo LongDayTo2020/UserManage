@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class RoleGroupRepository : IMaintain<Permission>
+    public interface IRoleGroupRepository
+    {
+        bool Create(RoleGroup roleGroup);
+        IEnumerable<RoleGroup> QueryAll();
+        RoleGroup Query(object roleGroup);
+        bool Delete(object id);
+        bool Update(object id, RoleGroup roleGroup);
+    }
+
+    public class RoleGroupRepository : IMaintain<RoleGroup>, IRoleGroupRepository
     {
         private readonly IDbConnection _iDbConnection;
 
@@ -16,7 +25,7 @@ _iDbConnection = iDbConnection;
      }
 
 
-        public bool Create(Permission permission)
+        public bool Create(RoleGroup roleGroup)
         {
             string sql = @"  INSERT INTO role_groups  ( 
   create_time 
@@ -29,10 +38,10 @@ _iDbConnection = iDbConnection;
 , @Name 
 , @CreateUser 
 , @UpdateUser )  ";
-            return _iDbConnection.Execute(sql,permission) > 0;
+            return _iDbConnection.Execute(sql,roleGroup) > 0;
         }
 
-        public IEnumerable<Permission> QueryAll()
+        public IEnumerable<RoleGroup> QueryAll()
         {
             string sql = @"  SELECT 
  id
@@ -42,10 +51,10 @@ _iDbConnection = iDbConnection;
 ,create_user
 ,update_user 
  FROM role_groups  ";
-            return _iDbConnection.Query<Permission>(sql);
+            return _iDbConnection.Query<RoleGroup>(sql);
         }
 
-        public Permission Query(object permission)
+        public RoleGroup Query(object roleGroup)
         {
             string sql = @" SELECT  
  id
@@ -56,7 +65,7 @@ _iDbConnection = iDbConnection;
 ,update_user 
  FROM role_groups 
  WHERE  id = @Id  LIMIT 1  ";
-            return _iDbConnection.QueryFirstOrDefault<Permission>(sql);
+            return _iDbConnection.QueryFirstOrDefault<RoleGroup>(sql);
         }
 
         public bool Delete(object id)
@@ -69,7 +78,7 @@ _iDbConnection = iDbConnection;
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 
-        public bool Update(object id, Permission permission)
+        public bool Update(object id, RoleGroup roleGroup)
         {
             string sql = @" UPDATE role_groups 
  SET  create_time = @CreateTime 
@@ -78,7 +87,7 @@ _iDbConnection = iDbConnection;
 , create_user = @CreateUser 
 , update_user = @UpdateUser 
  WHERE  id = @Id  ";
-            var parameters = new DynamicParameters(permission);
+            var parameters = new DynamicParameters(roleGroup);
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }

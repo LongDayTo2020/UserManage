@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class RoleRoleGroupRelationshipRepository : IMaintain<Permission>
+    public interface IRoleRoleGroupRelationshipRepository
+    {
+        bool Create(RoleRoleGroupRelationship permission);
+        IEnumerable<RoleRoleGroupRelationship> QueryAll();
+        RoleRoleGroupRelationship Query(object permission);
+        bool Delete(object id);
+        bool Update(object id, RoleRoleGroupRelationship permission);
+    }
+
+    public class RoleRoleGroupRelationshipRepository : IMaintain<RoleRoleGroupRelationship>, IRoleRoleGroupRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 
@@ -16,7 +25,7 @@ _iDbConnection = iDbConnection;
      }
 
 
-        public bool Create(Permission permission)
+        public bool Create(RoleRoleGroupRelationship permission)
         {
             string sql = @"  INSERT INTO roles_permissions_relationships  ( 
   create 
@@ -40,7 +49,7 @@ _iDbConnection = iDbConnection;
             return _iDbConnection.Execute(sql,permission) > 0;
         }
 
-        public IEnumerable<Permission> QueryAll()
+        public IEnumerable<RoleRoleGroupRelationship> QueryAll()
         {
             string sql = @"  SELECT 
  role_id
@@ -55,10 +64,10 @@ _iDbConnection = iDbConnection;
 ,update_user
 ,create_user 
  FROM roles_permissions_relationships  ";
-            return _iDbConnection.Query<Permission>(sql);
+            return _iDbConnection.Query<RoleRoleGroupRelationship>(sql);
         }
 
-        public Permission Query(object permission)
+        public RoleRoleGroupRelationship Query(object permission)
         {
             string sql = @" SELECT  
  role_id
@@ -74,8 +83,8 @@ _iDbConnection = iDbConnection;
 ,create_user 
  FROM roles_permissions_relationships 
  WHERE  role_id = @RoleId  AND 
-, permissions_id = @PermissionsId  LIMIT 1  ";
-            return _iDbConnection.QueryFirstOrDefault<Permission>(sql);
+, permissions_id = @RoleRoleGroupRelationshipsId  LIMIT 1  ";
+            return _iDbConnection.QueryFirstOrDefault<RoleRoleGroupRelationship>(sql);
         }
 
         public bool Delete(object id)
@@ -83,13 +92,13 @@ _iDbConnection = iDbConnection;
             string sql = @"  DELETE roles_permissions_relationships 
  WHERE 
  role_id = @RoleId 
-, permissions_id = @PermissionsId  ";
+, permissions_id = @RoleRoleGroupRelationshipsId  ";
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 
-        public bool Update(object id, Permission permission)
+        public bool Update(object id, RoleRoleGroupRelationship permission)
         {
             string sql = @" UPDATE roles_permissions_relationships 
  SET  create = @Create 
@@ -102,7 +111,7 @@ _iDbConnection = iDbConnection;
 , update_user = @UpdateUser 
 , create_user = @CreateUser 
  WHERE  role_id = @RoleId  
-, permissions_id = @PermissionsId  ";
+, permissions_id = @RoleRoleGroupRelationshipsId  ";
             var parameters = new DynamicParameters(permission);
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;

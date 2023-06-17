@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class UserRepository : IMaintain<User>
+    public interface IUserRepository
+    {
+        bool Create(User user);
+        IEnumerable<User> QueryAll();
+        User Query(object user);
+        bool Delete(object id);
+        bool Update(object id, User user);
+    }
+
+    public class UserRepository : IMaintain<User>, IUserRepository
     {
         private readonly IDbConnection _iDbConnection;
 

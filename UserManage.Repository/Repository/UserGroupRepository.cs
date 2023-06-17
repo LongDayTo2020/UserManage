@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class UserGroupRepository : IMaintain<Permission>
+    public interface IUserGroupRepository
+    {
+        bool Create(UserGroup permission);
+        IEnumerable<UserGroup> QueryAll();
+        UserGroup Query(object permission);
+        bool Delete(object id);
+        bool Update(object id, UserGroup permission);
+    }
+
+    public class UserGroupRepository : IMaintain<UserGroup>, IUserGroupRepository
     {
         private readonly IDbConnection _iDbConnection;
 
@@ -16,7 +25,7 @@ _iDbConnection = iDbConnection;
      }
 
 
-        public bool Create(Permission permission)
+        public bool Create(UserGroup permission)
         {
             string sql = @"  INSERT INTO user_groups  ( 
   create_time 
@@ -32,7 +41,7 @@ _iDbConnection = iDbConnection;
             return _iDbConnection.Execute(sql,permission) > 0;
         }
 
-        public IEnumerable<Permission> QueryAll()
+        public IEnumerable<UserGroup> QueryAll()
         {
             string sql = @"  SELECT 
  id
@@ -42,10 +51,10 @@ _iDbConnection = iDbConnection;
 ,create_user
 ,update_user 
  FROM user_groups  ";
-            return _iDbConnection.Query<Permission>(sql);
+            return _iDbConnection.Query<UserGroup>(sql);
         }
 
-        public Permission Query(object permission)
+        public UserGroup Query(object permission)
         {
             string sql = @" SELECT  
  id
@@ -56,7 +65,7 @@ _iDbConnection = iDbConnection;
 ,update_user 
  FROM user_groups 
  WHERE  id = @Id  LIMIT 1  ";
-            return _iDbConnection.QueryFirstOrDefault<Permission>(sql);
+            return _iDbConnection.QueryFirstOrDefault<UserGroup>(sql);
         }
 
         public bool Delete(object id)
@@ -69,7 +78,7 @@ _iDbConnection = iDbConnection;
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 
-        public bool Update(object id, Permission permission)
+        public bool Update(object id, UserGroup permission)
         {
             string sql = @" UPDATE user_groups 
  SET  create_time = @CreateTime 
