@@ -2,5 +2,5 @@
 
 public class RequestPermission
 {
-    
+    public string Name { get; set; }
 }

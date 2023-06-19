@@ -1,6 +1,6 @@
 ﻿namespace UserManage.Library.ViewModel.Request;
 
-public class RequestUser
+public class RequestRegister
 {
     public string Name { get; set; }
     public string Account { get; set; }

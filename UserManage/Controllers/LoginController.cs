@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserManage.Library.ViewModel.Request;
 using UserManage.Service.Service;
 
 namespace UserManage.Controllers
@@ -27,7 +23,7 @@ namespace UserManage.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult Register()
+        public IActionResult Register([FromBody] RequestRegister request)
         {
             return Ok();
         }
@@ -37,7 +33,7 @@ namespace UserManage.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult Login()
+        public IActionResult Login([FromBody] RequestLogin request)
         {
             return Ok();
         }
@@ -46,8 +42,8 @@ namespace UserManage.Controllers
         /// 登出
         /// </summary>
         /// <returns></returns>
-        [HttpPost("[action]")]
-        public IActionResult Logout()
+        [HttpPut("[action]")]
+        public IActionResult Logout([FromBody] RequestLogout request)
         {
             return Ok();
         }

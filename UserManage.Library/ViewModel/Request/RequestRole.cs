@@ -2,5 +2,5 @@
 
 public class RequestRole
 {
-    
+    public string? Name { get; set; }
 }

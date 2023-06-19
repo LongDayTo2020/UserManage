@@ -25,6 +25,14 @@ namespace UserManage.Controllers
         [HttpGet("[action]")]
         public IActionResult GetUserList()
             => Ok(_userService.GetAll());
+        
+        /// <summary>
+        /// 取得會員
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]/{id:int}")]
+        public IActionResult GetUser([FromRoute] int id)
+            => Ok(_userService.GetAll());
 
         /// <summary>
         /// 新增會員
@@ -50,5 +58,13 @@ namespace UserManage.Controllers
         [HttpDelete("[action]/{id:int}")]
         public IActionResult DeleteUser([FromRoute] int id)
             => Ok(_userService.Delete(id));
+
+        /// <summary>
+        /// 新增會員所屬群組
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("[action]/{userId:int}")]
+        public IActionResult UpdateUserGroup([FromRoute] int userId, [FromBody] RequestUserGroup request) =>
+            Ok(_userService.UpdateUserGroup(userId,request));
     }
 }

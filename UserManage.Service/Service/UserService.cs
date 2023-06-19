@@ -11,6 +11,7 @@ public interface IUserService
     bool Add(RequestUser user);
     bool Update(int id, RequestUser user);
     bool Delete(int id);
+    bool UpdateUserGroup(int userId, RequestUserGroup request);
 }
 
 public class UserService : IUserService
@@ -39,4 +40,9 @@ public class UserService : IUserService
     }
 
     public bool Delete(int id) => _userRepository.Delete(id);
+    
+    public bool UpdateUserGroup(int userId, RequestUserGroup request)
+    {
+        throw new NotImplementedException();
+    }
 }
