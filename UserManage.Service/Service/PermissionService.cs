@@ -26,14 +26,22 @@ public class PermissionService : IPermissionService
 
     public bool Add(RequestPermission permission)
     {
-        var newPermission = new Permission();
+        var newPermission = new Permission()
+        {
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(permission, newPermission);
         return _permissionRepository.Create(newPermission);
     }
 
     public bool Update(int id, RequestPermission permission)
     {
-        var updatePermission = new Permission();
+        var updatePermission = new Permission()
+        {
+            UpdateTime = DateTime.Now,
+            UpdateUser = ""
+        };
         ObjectLibrary.CopyProperties(permission, updatePermission);
         return _permissionRepository.Update(id, updatePermission);
     }

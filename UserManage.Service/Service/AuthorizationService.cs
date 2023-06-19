@@ -7,7 +7,7 @@ namespace UserManage.Service.Service;
 
 public interface IAuthorizationService
 {
-    List<RoleRoleGroupRelationship> GetAll();
+    List<RolePermissionRelationship> GetAll();
     bool Add(RequestAuthorization roleRoleGroupRelationship);
     bool Update(int id, RequestAuthorization roleRoleGroupRelationship);
     bool Delete(int id);
@@ -15,29 +15,37 @@ public interface IAuthorizationService
 
 public class AuthorizationService : IAuthorizationService
 {
-    private readonly IRoleRoleGroupRelationshipRepository _roleRoleGroupRelationshipRepository;
+    private readonly IRolePermissionRelationshipRepository _rolePermissionRelationshipRepository;
 
-    public AuthorizationService(IRoleRoleGroupRelationshipRepository roleRoleGroupRelationshipRepository)
+    public AuthorizationService(IRolePermissionRelationshipRepository rolePermissionRelationshipRepository)
     {
-        _roleRoleGroupRelationshipRepository = roleRoleGroupRelationshipRepository;
+        _rolePermissionRelationshipRepository = rolePermissionRelationshipRepository;
     }
 
-    public List<RoleRoleGroupRelationship> GetAll() => _roleRoleGroupRelationshipRepository.QueryAll().ToList();
+    public List<RolePermissionRelationship> GetAll() => _rolePermissionRelationshipRepository.QueryAll().ToList();
 
     public bool Add(RequestAuthorization roleRoleGroupRelationship)
     {
-        var newRoleRoleGroupRelationship = new RoleRoleGroupRelationship();
+        var newRoleRoleGroupRelationship = new RolePermissionRelationship()
+        {
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(roleRoleGroupRelationship, newRoleRoleGroupRelationship);
-        return _roleRoleGroupRelationshipRepository.Create(newRoleRoleGroupRelationship);
+        return _rolePermissionRelationshipRepository.Create(newRoleRoleGroupRelationship);
     }
 
 
     public bool Update(int id, RequestAuthorization roleRoleGroupRelationship)
     {
-        var updateRoleRoleGroupRelationship = new RoleRoleGroupRelationship();
+        var updateRoleRoleGroupRelationship = new RolePermissionRelationship()
+        {
+            UpdateTime = DateTime.Now,
+            UpdateUser = ""
+        };
         ObjectLibrary.CopyProperties(roleRoleGroupRelationship, updateRoleRoleGroupRelationship);
-        return _roleRoleGroupRelationshipRepository.Update(id, updateRoleRoleGroupRelationship);
+        return _rolePermissionRelationshipRepository.Update(id, updateRoleRoleGroupRelationship);
     }
 
-    public bool Delete(int id) => _roleRoleGroupRelationshipRepository.Delete(id);
+    public bool Delete(int id) => _rolePermissionRelationshipRepository.Delete(id);
 }

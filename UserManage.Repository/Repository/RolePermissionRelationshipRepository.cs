@@ -28,20 +28,25 @@ _iDbConnection = iDbConnection;
         public bool Create(RolePermissionRelationship rolePermissionRelationship)
         {
             string sql = @"  INSERT INTO roles_permissions_relationships  ( 
-  create 
-, update 
-, read 
-, delete 
-, verify 
+  role_id
+, permissions_id                                          
+, is_create 
+, is_update 
+, is_read 
+, is_delete 
+, is_verify 
 , create_time 
 , update_time 
 , update_user 
 , create_user  )
- VALUES (  @Create 
-, @Update 
-, @Read 
-, @Delete 
-, @Verify 
+ VALUES (
+  @RoleId
+, @PermissionsId
+, @IsCreate 
+, @IsUpdate 
+, @IsRead 
+, @IsDelete 
+, @IsVerify 
 , @CreateTime 
 , @UpdateTime 
 , @UpdateUser 
@@ -52,13 +57,13 @@ _iDbConnection = iDbConnection;
         public IEnumerable<RolePermissionRelationship> QueryAll()
         {
             string sql = @"  SELECT 
- role_id
-,permissions_id
-,create
-,update
-,read
-,delete
-,verify
+  role_id
+, permissions_id
+, is_create 
+, is_update 
+, is_read 
+, is_delete 
+, is_verify 
 ,create_time
 ,update_time
 ,update_user
@@ -72,11 +77,11 @@ _iDbConnection = iDbConnection;
             string sql = @" SELECT  
  role_id
 ,permissions_id
-,create
-,update
-,read
-,delete
-,verify
+, is_create 
+, is_update 
+, is_read 
+, is_delete 
+, is_verify 
 ,create_time
 ,update_time
 ,update_user
@@ -90,8 +95,8 @@ _iDbConnection = iDbConnection;
         public bool Delete(object id)
         {
             string sql = @"  DELETE roles_permissions_relationships 
- WHERE 
- role_id = @RoleId 
+  WHERE 
+  role_id = @RoleId 
 , permissions_id = @PermissionsId  ";
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, System.Data.DbType.Int32);
@@ -101,17 +106,17 @@ _iDbConnection = iDbConnection;
         public bool Update(object id, RolePermissionRelationship rolePermissionRelationship)
         {
             string sql = @" UPDATE roles_permissions_relationships 
- SET  create = @Create 
-, update = @Update 
-, read = @Read 
-, delete = @Delete 
-, verify = @Verify 
+ SET  is_create = @IsCreate 
+, is_update = @IsUpdate 
+, is_read = @IsRead 
+, is_delete = @IsDelete 
+, is_verify = @IsVerify 
 , create_time = @CreateTime 
 , update_time = @UpdateTime 
 , update_user = @UpdateUser 
 , create_user = @CreateUser 
  WHERE  role_id = @RoleId  
-, permissions_id = @PermissionsId  ";
+AND permissions_id = @PermissionsId  ";
             var parameters = new DynamicParameters(rolePermissionRelationship);
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;

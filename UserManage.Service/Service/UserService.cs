@@ -38,14 +38,23 @@ public class UserService : IUserService
 
     public bool Add(RequestUser user)
     {
-        var newUser = new User();
+        var newUser = new User()
+        {
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(user, newUser);
+
         return _userRepository.Create(newUser);
     }
 
     public bool Update(int id, RequestUser user)
     {
-        var updateUser = new User();
+        var updateUser = new User()
+        {
+            UpdateTime = DateTime.Now,
+            UpdateUser = ""
+        };
         ObjectLibrary.CopyProperties(user, updateUser);
         return _userRepository.Update(id, updateUser);
     }

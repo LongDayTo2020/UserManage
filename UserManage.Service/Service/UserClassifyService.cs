@@ -7,8 +7,9 @@ namespace UserManage.Service.Service;
 
 public interface IUserClassifyService
 {
-    bool AddUserGroup(RequestUserGroup request);
-    bool DeleteUserGroup(RequestUserGroup request);
+    List<UserRoleGroupRelationship> GetAll();
+    bool Add(RequestUserRoleGroup request);
+    bool Delete(RequestUserRoleGroup request);
 }
 
 /// <summary>
@@ -23,17 +24,22 @@ public class UserClassifyService : IUserClassifyService
         _userRoleGroupRelationshipRepository = userRoleGroupRelationshipRepository;
     }
 
-    public bool AddUserGroup(RequestUserGroup request)
+    public List<UserRoleGroupRelationship> GetAll()
+        => _userRoleGroupRelationshipRepository.QueryAll().ToList();
+
+    public bool Add(RequestUserRoleGroup request)
     {
-        var updateUser = new UserRoleGroupRelationship();
+        var updateUser = new UserRoleGroupRelationship()
+        {
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(request, updateUser);
         return _userRoleGroupRelationshipRepository.Create(updateUser);
     }
 
-    public bool DeleteUserGroup(RequestUserGroup request)
+    public bool Delete(RequestUserRoleGroup request)
     {
-        var updateUser = new UserRoleGroupRelationship();
-        ObjectLibrary.CopyProperties(request, updateUser);
-        return _userRoleGroupRelationshipRepository.Create(updateUser);
+        return _userRoleGroupRelationshipRepository.Delete(request);
     }
 }

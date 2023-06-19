@@ -1,4 +1,3 @@
-
 using System.Data;
 using Dapper;
 using UserManage.Repository.Entity;
@@ -16,54 +15,41 @@ namespace UserManage.Repository.Repository
         bool Update(object id, RoleRoleGroupRelationship permission);
     }
 
-    public class RoleRoleGroupRelationshipRepository : IMaintain<RoleRoleGroupRelationship>, IRoleRoleGroupRelationshipRepository
+    public class RoleRoleGroupRelationshipRepository : IMaintain<RoleRoleGroupRelationship>,
+        IRoleRoleGroupRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 
-        public RoleRoleGroupRelationshipRepository ( IDbConnection iDbConnection ){
-_iDbConnection = iDbConnection;
-     }
+        public RoleRoleGroupRelationshipRepository(IDbConnection iDbConnection)
+        {
+            _iDbConnection = iDbConnection;
+        }
 
 
         public bool Create(RoleRoleGroupRelationship permission)
         {
-            string sql = @"  INSERT INTO roles_permissions_relationships  ( 
-  create 
-, update 
-, read 
-, delete 
-, verify 
-, create_time 
-, update_time 
-, update_user 
-, create_user  )
- VALUES (  @Create 
-, @Update 
-, @Read 
-, @Delete 
-, @Verify 
+            string sql = @"  insert into roles_role_groups_relationships 
+      (role_id, role_group_id, create_time, create_user, update_time, update_user)
+ VALUES (  
+  @RoleId
+, @PermissionsId 
 , @CreateTime 
 , @UpdateTime 
 , @UpdateUser 
 , @CreateUser )  ";
-            return _iDbConnection.Execute(sql,permission) > 0;
+            return _iDbConnection.Execute(sql, permission) > 0;
         }
 
         public IEnumerable<RoleRoleGroupRelationship> QueryAll()
         {
             string sql = @"  SELECT 
  role_id
-,permissions_id
-,create
-,update
-,read
-,delete
-,verify
+,role_group_id
 ,create_time
 ,update_time
 ,update_user
 ,create_user 
- FROM roles_permissions_relationships  ";
+ FROM roles_role_groups_relationships  ";
             return _iDbConnection.Query<RoleRoleGroupRelationship>(sql);
         }
 
@@ -71,17 +57,12 @@ _iDbConnection = iDbConnection;
         {
             string sql = @" SELECT  
  role_id
-,permissions_id
-,create
-,update
-,read
-,delete
-,verify
+,role_group_id
 ,create_time
 ,update_time
 ,update_user
 ,create_user 
- FROM roles_permissions_relationships 
+ FROM roles_role_groups_relationships 
  WHERE  role_id = @RoleId  AND 
 , permissions_id = @RoleRoleGroupRelationshipsId  LIMIT 1  ";
             return _iDbConnection.QueryFirstOrDefault<RoleRoleGroupRelationship>(sql);
@@ -89,10 +70,10 @@ _iDbConnection = iDbConnection;
 
         public bool Delete(object id)
         {
-            string sql = @"  DELETE roles_permissions_relationships 
+            string sql = @"  DELETE roles_role_groups_relationships 
  WHERE 
  role_id = @RoleId 
-, permissions_id = @RoleRoleGroupRelationshipsId  ";
+, role_group_id = @RoleGroupId  ";
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
@@ -100,21 +81,7 @@ _iDbConnection = iDbConnection;
 
         public bool Update(object id, RoleRoleGroupRelationship permission)
         {
-            string sql = @" UPDATE roles_permissions_relationships 
- SET  create = @Create 
-, update = @Update 
-, read = @Read 
-, delete = @Delete 
-, verify = @Verify 
-, create_time = @CreateTime 
-, update_time = @UpdateTime 
-, update_user = @UpdateUser 
-, create_user = @CreateUser 
- WHERE  role_id = @RoleId  
-, permissions_id = @RoleRoleGroupRelationshipsId  ";
-            var parameters = new DynamicParameters(permission);
-            parameters.Add("Id", id, System.Data.DbType.Int32);
-            return _iDbConnection.Execute(sql, parameters) > 0;
+            return true;
         }
     }
 }

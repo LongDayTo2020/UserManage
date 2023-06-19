@@ -26,7 +26,10 @@ public class RoleService : IRoleService
 
     public bool Add(RequestRole role)
     {
-        var newRole = new Role();
+        var newRole = new Role(){
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(role, newRole);
         return _roleRepository.Create(newRole);
     }

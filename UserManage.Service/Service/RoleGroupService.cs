@@ -26,14 +26,20 @@ public class RoleGroupService : IRoleGroupService
 
     public bool Add(RequestRoleGroup roleGroup)
     {
-        var newRoleGroup = new RoleGroup();
+        var newRoleGroup = new RoleGroup(){
+            CreateTime = DateTime.Now,
+            CreateUser = ""
+        };
         ObjectLibrary.CopyProperties(roleGroup, newRoleGroup);
         return _roleGroupRepository.Create(newRoleGroup);
     }
 
     public bool Update(int id, RequestRoleGroup roleGroup)
     {
-        var updateRoleGroup = new RoleGroup();
+        var updateRoleGroup = new RoleGroup(){
+            UpdateTime = DateTime.Now,
+            UpdateUser = ""
+        };
         ObjectLibrary.CopyProperties(roleGroup, updateRoleGroup);
         return _roleGroupRepository.Update(id, updateRoleGroup);
     }

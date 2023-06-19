@@ -13,12 +13,9 @@ namespace UserManage.Controllers
     {
         private readonly IUserService _userService;
 
-        private readonly IUserClassifyService _userClassifyService;
-
-        public UserController(IUserService userService, IUserClassifyService userClassifyService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _userClassifyService = userClassifyService;
         }
 
         /// <summary>
@@ -61,21 +58,5 @@ namespace UserManage.Controllers
         [HttpDelete("[action]/{id:int}")]
         public IActionResult DeleteUser([FromRoute] int id)
             => Ok(_userService.Delete(id));
-
-        /// <summary>
-        /// 新增會員所屬群組
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut("[action]")]
-        public IActionResult AddUserGroup([FromBody] RequestUserGroup request) =>
-            Ok(_userClassifyService.AddUserGroup(request));
-        
-        /// <summary>
-        /// 刪除會員所屬群組
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut("[action]")]
-        public IActionResult DeleteUserGroup([FromBody] RequestUserGroup request) =>
-            Ok(_userClassifyService.DeleteUserGroup(request));
     }
 }
