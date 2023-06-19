@@ -1,5 +1,6 @@
 ﻿using UserManage.Library;
 using UserManage.Library.ViewModel.Request;
+using UserManage.Library.ViewModel.Response;
 using UserManage.Repository.Entity;
 using UserManage.Repository.Repository;
 
@@ -11,7 +12,7 @@ public interface IUserService
     bool Add(RequestUser user);
     bool Update(int id, RequestUser user);
     bool Delete(int id);
-    bool UpdateUserGroup(int userId, RequestUserGroup request);
+    ResponseUser? GetUser(int id);
 }
 
 public class UserService : IUserService
@@ -24,6 +25,16 @@ public class UserService : IUserService
     }
 
     public List<User> GetAll() => _userRepository.QueryAll().ToList();
+
+    public ResponseUser? GetUser(int id)
+        => _userRepository.QueryAll()
+            .Where(x => x.Id == id)
+            .Select(q =>
+            {
+                var responseUser = new ResponseUser();
+                ObjectLibrary.CopyProperties(q, responseUser);
+                return responseUser;
+            }).FirstOrDefault();
 
     public bool Add(RequestUser user)
     {
@@ -40,9 +51,4 @@ public class UserService : IUserService
     }
 
     public bool Delete(int id) => _userRepository.Delete(id);
-    
-    public bool UpdateUserGroup(int userId, RequestUserGroup request)
-    {
-        throw new NotImplementedException();
-    }
 }

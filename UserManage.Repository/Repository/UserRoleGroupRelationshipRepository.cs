@@ -7,7 +7,16 @@ using System;
 
 namespace UserManage.Repository.Repository
 {
-    public class UserRoleGroupRelationshipRepository : IMaintain<UserRoleGroupRelationship>
+    public interface IUserRoleGroupRelationshipRepository
+    {
+        bool Create(UserRoleGroupRelationship userRoleGroupRelationship);
+        IEnumerable<UserRoleGroupRelationship> QueryAll();
+        UserRoleGroupRelationship Query(object userRoleGroupRelationship);
+        bool Delete(object id);
+        bool Update(object id, UserRoleGroupRelationship userRoleGroupRelationship);
+    }
+
+    public class UserRoleGroupRelationshipRepository : IMaintain<UserRoleGroupRelationship>, IUserRoleGroupRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 

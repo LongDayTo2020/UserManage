@@ -13,9 +13,12 @@ namespace UserManage.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        private readonly IUserClassifyService _userClassifyService;
+
+        public UserController(IUserService userService, IUserClassifyService userClassifyService)
         {
             _userService = userService;
+            _userClassifyService = userClassifyService;
         }
 
         /// <summary>
@@ -25,14 +28,14 @@ namespace UserManage.Controllers
         [HttpGet("[action]")]
         public IActionResult GetUserList()
             => Ok(_userService.GetAll());
-        
+
         /// <summary>
         /// 取得會員
         /// </summary>
         /// <returns></returns>
         [HttpGet("[action]/{id:int}")]
         public IActionResult GetUser([FromRoute] int id)
-            => Ok(_userService.GetAll());
+            => Ok(_userService.GetUser(id));
 
         /// <summary>
         /// 新增會員
@@ -63,8 +66,16 @@ namespace UserManage.Controllers
         /// 新增會員所屬群組
         /// </summary>
         /// <returns></returns>
-        [HttpPut("[action]/{userId:int}")]
-        public IActionResult UpdateUserGroup([FromRoute] int userId, [FromBody] RequestUserGroup request) =>
-            Ok(_userService.UpdateUserGroup(userId,request));
+        [HttpPut("[action]")]
+        public IActionResult AddUserGroup([FromBody] RequestUserGroup request) =>
+            Ok(_userClassifyService.AddUserGroup(request));
+        
+        /// <summary>
+        /// 刪除會員所屬群組
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("[action]")]
+        public IActionResult DeleteUserGroup([FromBody] RequestUserGroup request) =>
+            Ok(_userClassifyService.DeleteUserGroup(request));
     }
 }
