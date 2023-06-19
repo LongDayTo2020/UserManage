@@ -1,4 +1,3 @@
-
 using System.Data;
 using Dapper;
 using UserManage.Repository.Entity;
@@ -16,13 +15,15 @@ namespace UserManage.Repository.Repository
         bool Update(object id, RolePermissionRelationship rolePermissionRelationship);
     }
 
-    public class RolePermissionRelationshipRepository : IMaintain<RolePermissionRelationship>, IRolePermissionRelationshipRepository
+    public class RolePermissionRelationshipRepository : IMaintain<RolePermissionRelationship>,
+        IRolePermissionRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 
-        public RolePermissionRelationshipRepository ( IDbConnection iDbConnection ){
-_iDbConnection = iDbConnection;
-     }
+        public RolePermissionRelationshipRepository(IDbConnection iDbConnection)
+        {
+            _iDbConnection = iDbConnection;
+        }
 
 
         public bool Create(RolePermissionRelationship rolePermissionRelationship)
@@ -51,7 +52,7 @@ _iDbConnection = iDbConnection;
 , @UpdateTime 
 , @UpdateUser 
 , @CreateUser )  ";
-            return _iDbConnection.Execute(sql,rolePermissionRelationship) > 0;
+            return _iDbConnection.Execute(sql, rolePermissionRelationship) > 0;
         }
 
         public IEnumerable<RolePermissionRelationship> QueryAll()
@@ -88,18 +89,21 @@ _iDbConnection = iDbConnection;
 ,create_user 
  FROM roles_permissions_relationships 
  WHERE  role_id = @RoleId  AND 
-, permissions_id = @PermissionsId  LIMIT 1  ";
+ permissions_id = @PermissionsId  LIMIT 1  ";
             return _iDbConnection.QueryFirstOrDefault<RolePermissionRelationship>(sql);
         }
 
-        public bool Delete(object id)
+        public bool Delete(object rolePermission)
         {
             string sql = @"  DELETE roles_permissions_relationships 
   WHERE 
   role_id = @RoleId 
-, permissions_id = @PermissionsId  ";
+AND permissions_id = @PermissionsId  ";
             var parameters = new DynamicParameters();
-            parameters.Add("Id", id, System.Data.DbType.Int32);
+            parameters.Add("RoleId", rolePermission.GetType().GetField("RoleId").GetValue(rolePermission),
+                System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", rolePermission.GetType().GetField("PermissionsId").GetValue(rolePermission),
+                System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 
@@ -110,15 +114,21 @@ _iDbConnection = iDbConnection;
 , is_update = @IsUpdate 
 , is_read = @IsRead 
 , is_delete = @IsDelete 
-, is_verify = @IsVerify 
-, create_time = @CreateTime 
+, is_verify = @IsVerify
 , update_time = @UpdateTime 
 , update_user = @UpdateUser 
-, create_user = @CreateUser 
  WHERE  role_id = @RoleId  
 AND permissions_id = @PermissionsId  ";
             var parameters = new DynamicParameters(rolePermissionRelationship);
-            parameters.Add("Id", id, System.Data.DbType.Int32);
+            parameters.Add("IsCreate", rolePermissionRelationship.CreateTime, System.Data.DbType.DateTime);
+            parameters.Add("IsUpdate", rolePermissionRelationship.IsUpdate, System.Data.DbType.Int32);
+            parameters.Add("IsRead", rolePermissionRelationship.IsRead, System.Data.DbType.Int32);
+            parameters.Add("IsDelete", rolePermissionRelationship.IsDelete, System.Data.DbType.Int32);
+            parameters.Add("IsVerify", rolePermissionRelationship.IsVerify, System.Data.DbType.Int32);
+            parameters.Add("UpdateTime", rolePermissionRelationship.UpdateTime, System.Data.DbType.DateTime);
+            parameters.Add("UpdateUser", rolePermissionRelationship.UpdateUser, System.Data.DbType.String);
+            parameters.Add("RoleId", rolePermissionRelationship.RoleId, System.Data.DbType.Int32);
+            parameters.Add("PermissionsId", rolePermissionRelationship.PermissionsId, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
     }

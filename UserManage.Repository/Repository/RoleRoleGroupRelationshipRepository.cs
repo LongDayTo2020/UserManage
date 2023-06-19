@@ -8,11 +8,11 @@ namespace UserManage.Repository.Repository
 {
     public interface IRoleRoleGroupRelationshipRepository
     {
-        bool Create(RoleRoleGroupRelationship permission);
+        bool Create(RoleRoleGroupRelationship roleRoleGroup);
         IEnumerable<RoleRoleGroupRelationship> QueryAll();
-        RoleRoleGroupRelationship Query(object permission);
+        RoleRoleGroupRelationship Query(object roleRoleGroup);
         bool Delete(object id);
-        bool Update(object id, RoleRoleGroupRelationship permission);
+        bool Update(object id, RoleRoleGroupRelationship roleRoleGroup);
     }
 
     public class RoleRoleGroupRelationshipRepository : IMaintain<RoleRoleGroupRelationship>,
@@ -26,18 +26,18 @@ namespace UserManage.Repository.Repository
         }
 
 
-        public bool Create(RoleRoleGroupRelationship permission)
+        public bool Create(RoleRoleGroupRelationship roleRoleGroup)
         {
             string sql = @"  insert into roles_role_groups_relationships 
       (role_id, role_group_id, create_time, create_user, update_time, update_user)
  VALUES (  
   @RoleId
-, @PermissionsId 
+, @RoleGroupId 
 , @CreateTime 
 , @UpdateTime 
 , @UpdateUser 
 , @CreateUser )  ";
-            return _iDbConnection.Execute(sql, permission) > 0;
+            return _iDbConnection.Execute(sql, roleRoleGroup) > 0;
         }
 
         public IEnumerable<RoleRoleGroupRelationship> QueryAll()
@@ -53,7 +53,7 @@ namespace UserManage.Repository.Repository
             return _iDbConnection.Query<RoleRoleGroupRelationship>(sql);
         }
 
-        public RoleRoleGroupRelationship Query(object permission)
+        public RoleRoleGroupRelationship Query(object roleRoleGroup)
         {
             string sql = @" SELECT  
  role_id
@@ -64,18 +64,23 @@ namespace UserManage.Repository.Repository
 ,create_user 
  FROM roles_role_groups_relationships 
  WHERE  role_id = @RoleId  AND 
-, permissions_id = @RoleRoleGroupRelationshipsId  LIMIT 1  ";
+ role_group_id = @RoleGroupId  LIMIT 1  ";
+            var parameters = new DynamicParameters();
+            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
+            
             return _iDbConnection.QueryFirstOrDefault<RoleRoleGroupRelationship>(sql);
         }
 
-        public bool Delete(object id)
+        public bool Delete(object roleRoleGroup)
         {
             string sql = @"  DELETE roles_role_groups_relationships 
  WHERE 
  role_id = @RoleId 
 , role_group_id = @RoleGroupId  ";
             var parameters = new DynamicParameters();
-            parameters.Add("Id", id, System.Data.DbType.Int32);
+            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 

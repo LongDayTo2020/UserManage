@@ -1,4 +1,3 @@
-
 using System.Data;
 using Dapper;
 using UserManage.Repository.Entity;
@@ -16,13 +15,15 @@ namespace UserManage.Repository.Repository
         bool Update(object id, UserRoleGroupRelationship userRoleGroupRelationship);
     }
 
-    public class UserRoleGroupRelationshipRepository : IMaintain<UserRoleGroupRelationship>, IUserRoleGroupRelationshipRepository
+    public class UserRoleGroupRelationshipRepository : IMaintain<UserRoleGroupRelationship>,
+        IUserRoleGroupRelationshipRepository
     {
         private readonly IDbConnection _iDbConnection;
 
-        public UserRoleGroupRelationshipRepository ( IDbConnection iDbConnection ){
-_iDbConnection = iDbConnection;
-     }
+        public UserRoleGroupRelationshipRepository(IDbConnection iDbConnection)
+        {
+            _iDbConnection = iDbConnection;
+        }
 
 
         public bool Create(UserRoleGroupRelationship userRoleGroupRelationship)
@@ -41,7 +42,7 @@ _iDbConnection = iDbConnection;
 , @UpdateTime 
 , @CreateUser 
 , @UpdateUser )  ";
-            return _iDbConnection.Execute(sql,userRoleGroupRelationship) > 0;
+            return _iDbConnection.Execute(sql, userRoleGroupRelationship) > 0;
         }
 
         public IEnumerable<UserRoleGroupRelationship> QueryAll()
@@ -72,29 +73,23 @@ _iDbConnection = iDbConnection;
             return _iDbConnection.QueryFirstOrDefault<UserRoleGroupRelationship>(sql);
         }
 
-        public bool Delete(object id)
+        public bool Delete(object userRoleGroup)
         {
             string sql = @"  DELETE users_role_groups_relationships 
  WHERE 
  user_id = @UserId 
-, role_group_id = @RoleGroupId  ";
+AND role_group_id = @RoleGroupId  ";
             var parameters = new DynamicParameters();
-            parameters.Add("Id", id, System.Data.DbType.Int32);
+            parameters.Add("RoleId", userRoleGroup.GetType().GetField("UserId").GetValue(userRoleGroup),
+                System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", userRoleGroup.GetType().GetField("RoleGroupId").GetValue(userRoleGroup),
+                System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 
         public bool Update(object id, UserRoleGroupRelationship userRoleGroupRelationship)
         {
-            string sql = @" UPDATE users_role_groups_relationships 
- SET  create_time = @CreateTime 
-, update_time = @UpdateTime 
-, create_user = @CreateUser 
-, update_user = @UpdateUser 
- WHERE  user_id = @UserId AND  
- role_group_id = @RoleGroupId  ";
-            var parameters = new DynamicParameters(userRoleGroupRelationship);
-            parameters.Add("Id", id, System.Data.DbType.Int32);
-            return _iDbConnection.Execute(sql, parameters) > 0;
+            return true;
         }
     }
 }

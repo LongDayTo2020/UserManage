@@ -1,4 +1,3 @@
-
 using System.Data;
 using Dapper;
 using UserManage.Repository.Entity;
@@ -20,9 +19,10 @@ namespace UserManage.Repository.Repository
     {
         private readonly IDbConnection _iDbConnection;
 
-        public UserRepository ( IDbConnection iDbConnection ){
-_iDbConnection = iDbConnection;
-     }
+        public UserRepository(IDbConnection iDbConnection)
+        {
+            _iDbConnection = iDbConnection;
+        }
 
 
         public bool Create(User user)
@@ -48,7 +48,7 @@ _iDbConnection = iDbConnection;
 , @Name 
 , @Account 
 , @Mail )  ";
-            return _iDbConnection.Execute(sql,user) > 0;
+            return _iDbConnection.Execute(sql, user) > 0;
         }
 
         public IEnumerable<User> QueryAll()
@@ -113,6 +113,15 @@ _iDbConnection = iDbConnection;
 , mail = @Mail 
  WHERE  id = @Id  ";
             var parameters = new DynamicParameters(user);
+            parameters.Add("CreateTime", user.CreateTime, System.Data.DbType.DateTime);
+            parameters.Add("Birthday", user.Birthday, System.Data.DbType.DateTime);
+            parameters.Add("Phone", user.Phone, System.Data.DbType.String);
+            parameters.Add("Password", user.Password, System.Data.DbType.String);
+            parameters.Add("CreateUser", user.CreateUser, System.Data.DbType.String);
+            parameters.Add("UpdateUser", user.UpdateUser, System.Data.DbType.String);
+            parameters.Add("Name", user.Name, System.Data.DbType.String);
+            parameters.Add("Account", user.Account, System.Data.DbType.String);
+            parameters.Add("Mail", user.Mail, System.Data.DbType.String);
             parameters.Add("Id", id, System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
