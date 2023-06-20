@@ -14,13 +14,13 @@ namespace UserManage.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class UserUserRoleGroupClassifyController : ControllerBase
+    public class UserIdentityClassifyController : ControllerBase
     {
-        private readonly IUserClassifyService _userClassifyService;
+        private readonly IUserIdentityClassifyService _userIdentityClassifyService;
 
-        public UserUserRoleGroupClassifyController(IUserClassifyService userClassifyService)
+        public UserIdentityClassifyController(IUserIdentityClassifyService userIdentityClassifyService)
         {
-            _userClassifyService = userClassifyService;
+            _userIdentityClassifyService = userIdentityClassifyService;
         }
 
         /// <summary>
@@ -28,20 +28,20 @@ namespace UserManage.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("[action]")]
-        public IActionResult GetUserRoleGroupList() => Ok(_userClassifyService.GetAll());
+        public IActionResult GetUserRoleGroupList() => Ok(_userIdentityClassifyService.GetAll());
         
         /// <summary>
         /// 新增使用者歸類角色群組
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult AddUserRoleGroup([FromBody] RequestUserRoleGroup request) => Ok(_userClassifyService.Add(request));
+        public IActionResult AddUserRoleGroup([FromBody] RequestUserRoleGroup request) => Ok(_userIdentityClassifyService.Add(request));
 
         /// <summary>
         /// 刪除使用者歸類角色群組
         /// </summary>
         /// <returns></returns>
         [HttpDelete("[action]")]
-        public IActionResult DeleteUserRoleGroup([FromBody] RequestUserRoleGroup request) => Ok(_userClassifyService.Delete(request));
+        public IActionResult DeleteUserRoleGroup([FromBody] RequestUserRoleGroup request) => Ok(_userIdentityClassifyService.Delete(request));
     }
 }

@@ -5,7 +5,7 @@ using UserManage.Repository.Repository;
 
 namespace UserManage.Service.Service;
 
-public interface IUserClassifyService
+public interface IUserIdentityClassifyService
 {
     List<UserRoleGroupRelationship> GetAll();
     bool Add(RequestUserRoleGroup request);
@@ -15,11 +15,11 @@ public interface IUserClassifyService
 /// <summary>
 /// 會員分類角色群
 /// </summary>
-public class UserClassifyService : IUserClassifyService
+public class UserIdentityClassifyService : IUserIdentityClassifyService
 {
     private readonly IUserRoleGroupRelationshipRepository _userRoleGroupRelationshipRepository;
 
-    public UserClassifyService(IUserRoleGroupRelationshipRepository userRoleGroupRelationshipRepository)
+    public UserIdentityClassifyService(IUserRoleGroupRelationshipRepository userRoleGroupRelationshipRepository)
     {
         _userRoleGroupRelationshipRepository = userRoleGroupRelationshipRepository;
     }

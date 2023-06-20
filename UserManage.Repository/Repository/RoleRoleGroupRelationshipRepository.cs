@@ -33,10 +33,10 @@ namespace UserManage.Repository.Repository
  VALUES (  
   @RoleId
 , @RoleGroupId 
-, @CreateTime 
-, @UpdateTime 
-, @UpdateUser 
-, @CreateUser )  ";
+, @CreateTime
+, @CreateUser
+, @UpdateTime   
+, @UpdateUser )  ";
             return _iDbConnection.Execute(sql, roleRoleGroup) > 0;
         }
 
@@ -66,9 +66,11 @@ namespace UserManage.Repository.Repository
  WHERE  role_id = @RoleId  AND 
  role_group_id = @RoleGroupId  LIMIT 1  ";
             var parameters = new DynamicParameters();
-            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
-            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
-            
+            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup),
+                System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup),
+                System.Data.DbType.Int32);
+
             return _iDbConnection.QueryFirstOrDefault<RoleRoleGroupRelationship>(sql);
         }
 
@@ -77,10 +79,12 @@ namespace UserManage.Repository.Repository
             string sql = @"  DELETE roles_role_groups_relationships 
  WHERE 
  role_id = @RoleId 
-, role_group_id = @RoleGroupId  ";
+AND role_group_id = @RoleGroupId  ";
             var parameters = new DynamicParameters();
-            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
-            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup), System.Data.DbType.Int32);
+            parameters.Add("RoleId", roleRoleGroup.GetType().GetField("RoleId").GetValue(roleRoleGroup),
+                System.Data.DbType.Int32);
+            parameters.Add("RoleGroupId", roleRoleGroup.GetType().GetField("RoleGroupId").GetValue(roleRoleGroup),
+                System.Data.DbType.Int32);
             return _iDbConnection.Execute(sql, parameters) > 0;
         }
 

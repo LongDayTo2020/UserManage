@@ -47,9 +47,11 @@ builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRoleGroupService, RoleGroupService>();
 builder.Services.AddScoped<IRolePermissionRelationshipService, RolePermissionRelationshipService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IUserClassifyService, UserClassifyService>();
+builder.Services.AddScoped<IUserIdentityClassifyService, UserIdentityClassifyService>();
 builder.Services.AddScoped<IUserGroupService, UserGroupService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleGroupClassifyService, RoleGroupClassifyService>();
+
 
 #endregion
 
